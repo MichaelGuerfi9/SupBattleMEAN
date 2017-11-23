@@ -31,7 +31,7 @@ const User = require('./User.controller')
 
 app.post("/register",User.register)
 app.post("/login",User.authenticate)
-router.get('/logout',User.logout);
+app.get('/logout',User.logout);
 
 // app.get('/collaborateurs', collaborateur.findAll)
 // app.get('/collaborateur/:id', collaborateur.findOne)
