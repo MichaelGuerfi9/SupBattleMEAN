@@ -2,15 +2,12 @@ require('colors')
 const express = require('express')
 const mongoose = require('mongoose')
 const util = require('util')
-
+var session = require('express-session')
 
 // Création d'une application ExpressJS
 const app = express()
 const bodyParser = require('body-parser')
 
-app.get('/test', (req, res) => {
-    res.send('Hello World!')
-})
 
 app.use('/',bodyParser.json())
 
@@ -21,31 +18,20 @@ app.use("/", (req, res, next) => {
     next()
 });
 
-const User = require('./User.model')
+app.use(session({
+    secret: 'work hard',
+    resave: true,
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongoose: db
+      })
+  }));
 
-app.post("/register", (req, res, next) => {
-    if (req.body.email &&
-        req.body.username &&
-        req.body.password) {
-        var userData = {
-          email: req.body.email,
-          username: req.body.username,
-          password: req.body.password,
-        }
-        //use schema.create to insert data into the db
-        User.create(userData, function (err, user) {
-          if (err) {
-            return res.send(err)
-          } else {
-            return res.send('Hello world');
-          }
-        });
-      }
-      else{
-          res.send('Gone wrong')
-      }
+const User = require('./User.controller')
 
-})
+app.post("/register",User.register)
+app.post("/login",User.authenticate)
+router.get('/logout',User.logout);
 
 // app.get('/collaborateurs', collaborateur.findAll)
 // app.get('/collaborateur/:id', collaborateur.findOne)
