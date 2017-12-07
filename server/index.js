@@ -21,17 +21,18 @@ app.use("/", (req, res, next) => {
 app.use(session({
     secret: 'work hard',
     resave: true,
-    saveUninitialized: false,
-    store: new MongoStore({
-        mongoose: db
-      })
+    saveUninitialized: false
   }));
 
 const User = require('./User.controller')
+const Card = require('./Card.controller')
 
 app.post("/register",User.register)
 app.post("/login",User.authenticate)
 app.get('/logout',User.logout);
+app.get('/getCards', User.getAllCards)
+app.get('/card',Card.getRandomCard)
+app.post('/newCard',Card.createCard)
 
 // app.get('/collaborateurs', collaborateur.findAll)
 // app.get('/collaborateur/:id', collaborateur.findOne)

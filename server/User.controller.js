@@ -19,7 +19,6 @@ module.exports = {
                 })
             }
     },
-
     register: (req,res,next) => {
         if (req.body.email &&
             req.body.username &&
@@ -63,5 +62,32 @@ module.exports = {
             // err.status = 401;
             // return next(err);
           }
+    },
+    // getCard: (req, res, next) => {
+    //   var user = req.user
+    //   if(user){
+
+    //   }
+    //   else{
+    //     return res.status(500).json({error:1,message:'Veuillez vous connecter'})
+    //   }
+    // },
+    getAllCards: (req, res) => {
+      var user = req.user;
+      if(user){
+        var query = {_id : user._id}
+        User.find({query}, {_id: false,username:false,password:false,cards:true})
+            .exec()
+            .then(cards => {
+                if(cards === null){
+                    return res.status(500).json({error:1,message:'Aucune carte trouvée'})
+                }
+                res.json(cards)
+            })
+            .catch(err => res.status(500).json({error:1, message:err.message}))
     }
+    else {
+      return res.status(500).json({error:1,message:'Veuillez vous connecter'})
+    }
+  },
 }

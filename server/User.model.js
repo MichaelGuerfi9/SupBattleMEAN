@@ -18,6 +18,10 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  cards: {
+    type: Array,
+    "default": [],
+  }
 });
 
 UserSchema.pre('save', function (next) {
