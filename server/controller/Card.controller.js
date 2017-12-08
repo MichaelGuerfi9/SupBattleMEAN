@@ -52,4 +52,15 @@ module.exports = {
             return res.status(500).json({error:1,message:'Veuillez vous connecter'})
         }
     },
+    fetchAll: (req,res) => {
+        Card.find({})
+        .exec()
+        .then(cards => {
+            if(cards === null){
+                return res.status(500).json({error:1,message:'Aucune carte trouvé'})
+            }
+            res.json(cards)
+        })
+        .catch(err => res.status(500).json({error:1, message:err.message}))
+    }
 }

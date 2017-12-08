@@ -14,7 +14,7 @@ module.exports = {
                     {
                         req.session.userId = user._id;
                         console.log(req.session.userId)
-                        res.send('Logged')
+                        res.send(user._id)
                     }
                 })
             }
@@ -33,7 +33,7 @@ module.exports = {
               if (err) {
                 return res.send(err)
               } else {
-                return res.send('Hello world');
+                return res.send(user._id);
               }
             });
           }
@@ -73,20 +73,16 @@ module.exports = {
     //   }
     // },
     getAllCards: (req, res) => {
-      if (req.session && req.session.userId) {
-        var query = {_id : user._id}
-        User.find({query}, {_id: false,username:false,password:false,cards:true})
+        var user = req.query.user;
+        // var query = {_id : user}
+        User.find({_id: user},{_id:0,cards:1})
             .exec()
-            .then(cards => {
-                if(cards === null){
+            .then(user => {
+                if(user === null){
                     return res.status(500).json({error:1,message:'Aucune carte trouvée'})
                 }
-                res.json(cards)
+                res.json(user)
             })
             .catch(err => res.status(500).json({error:1, message:err.message}))
-    }
-    else {
-      return res.status(500).json({error:1,message:'Veuillez vous connecter'})
-    }
-  },
-}
+    },
+  }

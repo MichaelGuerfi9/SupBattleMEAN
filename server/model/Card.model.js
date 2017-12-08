@@ -10,7 +10,7 @@ var CardSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    image_url: {
+    imageUrl: {
         type: String,
         required: true,
     },
