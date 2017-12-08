@@ -1,4 +1,5 @@
-const Card  = require('./Card.model')
+const Card  = require('../model/Card.model')
+const User = require('../model/User.model')
 
 module.exports = {
     createCard: (req,res) => {
@@ -28,8 +29,7 @@ module.exports = {
             }
     },
     getRandomCard: (req, res) => {
-        var user = req.user;
-        if(user){
+        if (req.session && req.session.userId) {
             Card.count().exec(function (err, count) {
                 Card.findOne({}).skip(Math.random()*count)
                 .exec()
@@ -37,7 +37,14 @@ module.exports = {
                     if(card === null){
                         return res.status(500).json({error:1,message:'Aucune carte trouvée'})
                     }
-                    res.json(card);
+                    User.findByIdAndUpdate(
+                        req.session.userId,
+                        {$push: {cards:card}},
+                        {safe: true, upsert: true},
+                        function(err, model) {
+                            console.log(err);
+                        })
+                    res.json(card)
                 })
             })
         }

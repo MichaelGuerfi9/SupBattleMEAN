@@ -24,25 +24,12 @@ app.use(session({
     saveUninitialized: false
   }));
 
-const User = require('./User.controller')
-const Card = require('./Card.controller')
-
-app.post("/register",User.register)
-app.post("/login",User.authenticate)
-app.get('/logout',User.logout);
-app.get('/getCards', User.getAllCards)
-app.get('/card',Card.getRandomCard)
-app.post('/newCard',Card.createCard)
-
-// app.get('/collaborateurs', collaborateur.findAll)
-// app.get('/collaborateur/:id', collaborateur.findOne)
-// app.post('/collaborateur',collaborateur.create)
-// app.put('/collaborateur/:id', collaborateur.update)
-// app.delete('/collaborateur/:id', collaborateur.delete)
-
-/*
-    Configuration
-*/
+var deckRoutes = require('./routes/DeckRoutes');
+deckRoutes(app);
+var userRoutes = require('./routes/UserRoutes');
+userRoutes(app);
+var cardRoutes = require('./routes/CardRoutes');
+cardRoutes(app);
 
 app.set('ip', 'localhost')
 app.set('port', 1337)

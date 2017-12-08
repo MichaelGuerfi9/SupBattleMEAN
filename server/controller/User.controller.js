@@ -1,4 +1,4 @@
-const User = require('./User.model')
+const User = require('../model/User.model')
 
 module.exports = {
     authenticate: (req,res) => {
@@ -8,7 +8,7 @@ module.exports = {
                     if(err || !user){
                         var error = new Error('Wrong credentials')
                         error.status = 401
-                        return res.send(error, err)
+                        return res.status(error.status).send(error)
                     }
                     else
                     {
@@ -73,8 +73,7 @@ module.exports = {
     //   }
     // },
     getAllCards: (req, res) => {
-      var user = req.user;
-      if(user){
+      if (req.session && req.session.userId) {
         var query = {_id : user._id}
         User.find({query}, {_id: false,username:false,password:false,cards:true})
             .exec()
