@@ -5,8 +5,8 @@ module.exports = {
     createDeck: (req,res) => {
         if (req.body) {
             var deckData = {
-                cards: req.body.cards,
-                userId: req.session.userId
+                cards: [req.body[1],req.body[2],req.body[3]],
+                userId: req.body[0].userId
             }
             //use schema.create to insert data into the db
             Deck.create(deckData, function (err, user) {
@@ -26,7 +26,7 @@ module.exports = {
             .exec()
             .then(deck => {
                 if(deck === null){
-                    return res.status(500).json({error:1,message:'Aucun deck trouvé'})
+                    return res.status(200).json({error:1,message:'Aucun deck trouvé'})
                 }res.json({success:1, message:'Deck modifié', inserted:deck})})
             .catch(err => res.status(500).json({error:1, message:err.message}))
     },
@@ -41,7 +41,8 @@ module.exports = {
             .catch(err => res.status(500).json({error:1, message:err.message}))
     },
     getDecks: (req,res) => {
-        Deck.findById(req.session.userId)
+        var query = req.query.user
+        Deck.find({userId:query})
         .exec()
         .then(deck => {
             if(deck === null){

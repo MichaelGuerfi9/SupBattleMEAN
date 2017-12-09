@@ -3,13 +3,17 @@ import axios from 'axios'
 const API_ENDPOINT = '//localhost:1337'
 
 export default {
-    getDecks(){
-        return axios.get(`${API_ENDPOINT}/decks`)
-        .then(res => res.data)
+    getDecks(user){
+        return axios.get(`${API_ENDPOINT}/decks`,{
+            params: {
+                user
+            }
+        })
+        // .then(res => res.data)
         .catch(console.error)
     },
     createDeck(cards){
-        return axios.get(`${API_ENDPOINT}/createDecks`,cards)
+        return axios.post(`${API_ENDPOINT}/createDecks`,cards)
         .then(res => res.data)
         .catch(console.error)
     },

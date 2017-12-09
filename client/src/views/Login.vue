@@ -1,8 +1,14 @@
 <template>
  <main id="userlogin-view">
      <div class="container">
-         <user-login @login="loginUser"></user-login>
-         <user-register @register="registerUser"></user-register>
+         <div style="float:left;">
+             <h4>Connexion :</h4>
+            <user-login @login="loginUser"></user-login>
+         </div>
+         <div style="float:right;">
+             <h4>Inscription</h4>
+            <user-register @register="registerUser"></user-register>
+         </div>
      </div>
  </main>
 </template>

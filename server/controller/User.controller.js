@@ -81,7 +81,19 @@ module.exports = {
                 if(user === null){
                     return res.status(500).json({error:1,message:'Aucune carte trouvée'})
                 }
+
+                for(var i = 0; i<user[0].cards.length;i++){
+                  if(user[0].cards[i].quality == "legendary"){
+                    user[0].cards[i].quality = "#ffa500"
+                  }
+                  else if (user[0].cards[i].quality == 'epic'){
+                    user[0].cards[i].quality= "#ce1bab"
+                  }
+                  else {
+                    user[0].cards[i].quality = "#FFF"
+                  }
                 res.json(user)
+              }
             })
             .catch(err => res.status(500).json({error:1, message:err.message}))
     },

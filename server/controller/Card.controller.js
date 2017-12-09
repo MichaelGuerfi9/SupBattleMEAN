@@ -29,7 +29,8 @@ module.exports = {
             }
     },
     getRandomCard: (req, res) => {
-        if (req.session && req.session.userId) {
+            var query = req.query.userId
+            if(query){
             Card.count().exec(function (err, count) {
                 Card.findOne({}).skip(Math.random()*count)
                 .exec()
@@ -38,7 +39,7 @@ module.exports = {
                         return res.status(500).json({error:1,message:'Aucune carte trouvée'})
                     }
                     User.findByIdAndUpdate(
-                        req.session.userId,
+                        query,
                         {$push: {cards:card}},
                         {safe: true, upsert: true},
                         function(err, model) {
@@ -47,8 +48,7 @@ module.exports = {
                     res.json(card)
                 })
             })
-        }
-        else{
+        }else{
             return res.status(500).json({error:1,message:'Veuillez vous connecter'})
         }
     },

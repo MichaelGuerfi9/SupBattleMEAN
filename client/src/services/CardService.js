@@ -3,8 +3,12 @@ import axios from 'axios'
 const API_ENDPOINT = '//localhost:1337'
 
 export default {
-    getRandomCard(){
-        return axios.get(`${API_ENDPOINT}/card`)
+    getRandomCard(userId){
+        return axios.get(`${API_ENDPOINT}/card`,{
+            params: {
+                userId
+            }
+        })
         .then(res => res.data)
         .catch(console.error)
     },
