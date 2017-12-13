@@ -32,7 +32,7 @@ var cardRoutes = require('./routes/CardRoutes');
 cardRoutes(app);
 
 app.set('ip', 'localhost')
-app.set('port', 1337)
+app.set('port', 3000)
 
 // Indique à Mongoose que les promesses à utiliser sont celles par défaut dans Node.js (objet global)
 mongoose.Promise = global.Promise
@@ -43,11 +43,25 @@ const appListen = (app, port, ip) => {
         app.listen(port, ip, resolve)
     })
 }
+var os = require('os');
+
+var interfaces = os.networkInterfaces();
+var addresses = [];
+for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
+        var address = interfaces[k][k2];
+        if (address.family === 'IPv4' && !address.internal) {
+            addresses.push(address.address);
+        }
+    }
+}
+
+console.log(addresses);
 
 // Connexion à la base de données MONGO,
 mongoose
     .connect('mongodb://localhost:27017/supbattle', {useMongoClient:true})
     .then( () => console.log('MongoDB : Connexion établie'.bgGreen) )
     .then( appListen(app, app.get('port'), app.get('ip')) )
-    .then( () => console.log(` App Started on http://${app.get('ip')}:${app.get('port')} `.bgGreen) )
+    .then( () => console.log(` App Started on ${addresses} http://${app.get('ip')}:${app.get('port')} `.bgGreen) )
     .catch(err => console.log(err.message.red))

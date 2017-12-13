@@ -28,9 +28,7 @@ module.exports = {
                 res.send('Gone wrong')
             }
     },
-    getRandomCard: (req, res) => {
-            var query = req.query.userId
-            if(query){
+    getRandomCard: (req, res) => {s
             Card.count().exec(function (err, count) {
                 Card.findOne({}).skip(Math.random()*count)
                 .exec()
@@ -48,9 +46,6 @@ module.exports = {
                     res.json(card)
                 })
             })
-        }else{
-            return res.status(500).json({error:1,message:'Veuillez vous connecter'})
-        }
     },
     fetchAll: (req,res) => {
         Card.find({})

@@ -12,7 +12,6 @@ var CardSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true,
     },
     cardType: {
         type: String,
