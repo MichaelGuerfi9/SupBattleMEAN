@@ -30,7 +30,7 @@ module.exports = {
     },
     getRandomCard: (req, res) => {
         console.log(req.params)
-            query = req.params.userConnected;
+            query = req.query.userConnected;
             Card.count().exec(function (err, count) {
                 Card.findOne({}).skip(Math.random()*count)
                 .exec()
