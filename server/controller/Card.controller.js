@@ -28,7 +28,9 @@ module.exports = {
                 res.send('Gone wrong')
             }
     },
-    getRandomCard: (req, res) => {s
+    getRandomCard: (req, res) => {
+        console.log(req.params)
+            query = req.params.userConnected;
             Card.count().exec(function (err, count) {
                 Card.findOne({}).skip(Math.random()*count)
                 .exec()
