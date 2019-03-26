@@ -7,7 +7,7 @@ module.exports = {
             var cardData = {
                 name: req.body.name,
                 description: req.body.description,
-                image_url: req.body.image_url,
+                photo: req.body.photo,
                 cardType: req.body.cardType,
                 quality: req.body.quality,
                 mana: req.body.mana,
@@ -29,8 +29,9 @@ module.exports = {
             }
     },
     getRandomCard: (req, res) => {
-        console.log(req.params)
-            query = req.params.userConnected;
+            query = req.query.userConnected;
+            var result = query.slice(1, -1);
+            console.log(result)
             Card.count().exec(function (err, count) {
                 Card.findOne({}).skip(Math.random()*count)
                 .exec()
@@ -39,7 +40,7 @@ module.exports = {
                         return res.status(500).json({error:1,message:'Aucune carte trouvée'})
                     }
                     User.findByIdAndUpdate(
-                        query,
+                        result,
                         {$push: {cards:card}},
                         {safe: true, upsert: true},
                         function(err, model) {

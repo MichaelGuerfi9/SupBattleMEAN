@@ -1,20 +1,26 @@
 const Deck = require('../model/Deck.model')
 const User = require('../model/User.model')
+var mongoose = require('mongoose');
 
 module.exports = {
     createDeck: (req,res) => {
         if (req.body) {
+            var query = req.body.userId;
+            var user = query.slice(1, -1);
             var deckData = {
-                cards: [req.body[1],req.body[2],req.body[3]],
-                userId: req.body[0].userId
+                cards: req.body.deck,
+                userId: mongoose.Types.ObjectId(user),
+                deckName: req.body.deckName
             }
+
             //use schema.create to insert data into the db
             Deck.create(deckData, function (err, user) {
                 if (err) {
-                return res.send(err)
-                } else {
-                return res.send('Deck Created');
-                }
+                    console.log(err);
+                    return res.status(500).json({error:1,message:err})
+                    } else {
+                    return res.send('Deck Created');
+                    }
             });
             }
             else{
@@ -41,14 +47,21 @@ module.exports = {
             .catch(err => res.status(500).json({error:1, message:err.message}))
     },
     getDecks: (req,res) => {
-        var query = req.query.user
-        Deck.find({userId:query})
+        var query = req.query.userConnected
+        var user = query.slice(1, -1);
+        var decks = [];
+        Deck.find({userId:user})
         .exec()
         .then(deck => {
             if(deck === null){
                 return res.status(500).json({error:1,message:'Aucun deck trouvé'})
             }
-            res.json(deck)
+            deck.forEach(element => {
+                element.cards.push({'deckName':element.deckName})
+                element.cards.push({'id':element._id})
+                decks.push(element.cards);
+            });
+            res.json(decks)
         })
         .catch(err => res.status(500).json({error:1, message:err.message}))
     }

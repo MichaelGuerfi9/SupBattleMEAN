@@ -3,11 +3,29 @@ const express = require('express')
 const mongoose = require('mongoose')
 const util = require('util')
 var session = require('express-session')
+var socketio = require('socket.io');
+var http = require('http')
 
 // Création d'une application ExpressJS
 const app = express()
-const bodyParser = require('body-parser')
+var server = http.Server(app)
 
+const bodyParser = require('body-parser')
+var websocket = socketio(server);
+server.listen(3000, () => console.log('listening on *:3000'));
+
+
+websocket.on('connection', (socket) => {
+    console.log('A client just joined on',socket.id);
+    websocket.emit('message','Coucou')
+  });
+
+  websocket.on('test',() => {
+      console.log('yooooo');
+  })
+  websocket.on('test2',() => {
+    console.log('yooooo2');
+})
 
 app.use('/',bodyParser.json())
 

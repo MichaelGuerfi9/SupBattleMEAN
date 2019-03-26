@@ -12,6 +12,10 @@ var DeckSchema = new mongoose.Schema({
     userId :{
         type: ObjectId,
         required: true,
+    },
+    deckName: {
+        type: String,
+        required: true,
     }
 })
 
